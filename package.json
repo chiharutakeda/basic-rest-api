@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node-dev app/app.js",
-    "connect": "sqlite3 app/db/database/sqlite3"
+    "connect": "sqlite3 app/db/database.sqlite3"
   },
   "author": "takeda",
   "license": "MIT",
