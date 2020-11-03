@@ -1,10 +1,16 @@
 const express = require('express')
 const app =express()
 const sqlite3 = require('sqlite3')
+const path = require('path')
+
 const dbPath = "app/db/database.sqlite3"
+
+//_dirname=C:\develop\basic-rest-api\appになっていて'publicとつなげるだけ'
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/api/v1/hello',(req, res) =>{
     console.log(new sqlite3.Database(dbPath));
+    console.log(__dirname)
 })
 
 // Get all users
