@@ -2,8 +2,14 @@ const express = require('express')
 const app =express()
 const sqlite3 = require('sqlite3')
 const path = require('path')
+//basic認証
+var basicAuth = require('basic-auth-connect');
 
 const dbPath = "app/db/database.sqlite3"
+
+app.use(basicAuth(
+  'user', 'password'
+))
 
 //_dirname=C:\develop\basic-rest-api\appになっていて'publicとつなげるだけ'
 app.use(express.static(path.join(__dirname, 'public')))
