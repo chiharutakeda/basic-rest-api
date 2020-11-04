@@ -85,8 +85,8 @@ app.post('/api/v1/users/',async(req, res) => {
     const dateOfBirth = req.body.date_of_birth ? req.body.date_of_birth : ""
 
     await run(
-        `INSERT INTO users (name, profile, date_of_birth) VALUES ("${name}","${profile}","${dateOfBirth}")`
-        ,db,
+        `INSERT INTO users (name, profile, date_of_birth) VALUES ("${name}","${profile}","${dateOfBirth}")`,
+        db,
         res,
         "新規ユーザーを作成しました。")
     db.close()
