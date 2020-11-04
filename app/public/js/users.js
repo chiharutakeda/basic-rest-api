@@ -6,6 +6,36 @@ const userModule = (() => {
     const headers =new Headers()
     headers.set("Content-Type", "application/json")
 
+    const handleError = async (res) => {
+        const resJson = await res.json()
+
+        switch (res.status){
+            case 200:
+                alert(resJson.message)
+                window.location.href = "/"
+                break;
+            case 201:
+                alert(resJson.message)
+                window.location.href = "/"
+                break;
+            case 400:
+                //リクエストのパラメータ間違い
+                alert(resJson.error)
+                break;
+            case 404:
+                //指定したリソースが見つからない
+                alert(resJson.error)
+                break;
+            case 500:
+                //サーバー内部のエラー
+                alert(restJson.error)
+                break;
+            default:
+                alert("何らかのエラーが発生しました。")
+                break;
+        }
+    }
+
     return {
         fetchAllusers: async() => {
             const res = await fetch(BASE_URL)
@@ -43,10 +73,8 @@ const userModule = (() => {
                 body:JSON.stringify(body)
             })
 
-            const resJson =await res.json()
+            return handleError(res)
 
-            alert(resJson.message)
-            window.location.href ="/"
         },
         setExsistingValue: async (uid) => {
             const res = await fetch(BASE_URL + "/" + uid)
@@ -73,25 +101,19 @@ const userModule = (() => {
                 headers: headers,
                 body:JSON.stringify(body)
             })
-
-            const resJson =await res.json()
-
-            alert(resJson.message)
-            window.location.href ="/"
+            return handleError(res)
         },
         deleteUser: async (uid) => {
             const ret = window.confirm('このユーザーを削除しますか')
-            console.log(ret)
             if (!ret) {
                 return false
             } else {
+                //api投げる
                 const res = await fetch(BASE_URL + "/" + uid, {
                     method: "DELETE",
                     headers:headers
                 })
-                const resJson = await res.json()
-                alert(resJson.message)
-                window.location.href ="/"
+                return handleError(res)
             }
         }
     }
