@@ -20,6 +20,22 @@ const indexModule = (() => {
                 return window.location.href = '/'
             })
             break;
+        case '/edit.html':
+            const uid = window.location.search.split('?uid=')[1]
+            //保存ボタンを押されたとき
+            document.getElementById('save-btn').addEventListener('click',()=>{
+                return userModule.saveUser(uid)
+            })
+            //キャンセルボタンを押されたとき
+            document.getElementById('cancel-btn').addEventListener('click',()=>{
+                return window.location.href = '/'
+            })
+            //削除ボタンを押されたとき
+            document.getElementById('delete-btn').addEventListener('click',()=>{
+                return userModule.deleteUser(uid)
+            })
+            return userModule.setExsistingValue(uid)
+
         default:
             break;
     }
