@@ -2,6 +2,9 @@
 //即時関数でモジュール化
 const userModule = (() => {
     const BASE_URL = "http://localhost:3000/api/v1/users"
+    //ヘッダーの設定
+    const headers =new Headers()
+    headers.set("Content-Type", "application/json")
 
     return {
         fetchAllusers: async() => {
@@ -20,6 +23,29 @@ const userModule = (() => {
                               </tr>`
                 document.getElementById('users-list').insertAdjacentHTML('beforeend',body)
             }
+        },
+        createUser: async () => {
+            const name =document.getElementById("name").value
+            const profile =document.getElementById("profile").value
+            const dateOfBirth =document.getElementById("date-of-birth").value
+
+            //リクエストのbody
+            const body = {
+                name: name,
+                profile: profile,
+                date_of_birth: dateOfBirth
+            }
+
+            const res = await fetch(BASE_URL,{
+                method:"POST",
+                headers: headers,
+                body:JSON.stringify(body)
+            })
+
+            const resJson =await res.json()
+
+            alert(resJson.message)
+            window.location.href ="/"
         }
     }
 })()
