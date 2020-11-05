@@ -182,6 +182,26 @@ app.get('/api/v1/users/:id/following',(req, res) => {
     db.close()
 })
 
+// Get a following users
+app.get('/api/v1/users/:id/following/:follower_id',(req, res) => {
+    //connect database
+    const db = new sqlite3.Database(dbPath)
+    //リクエストURLの:hogeをとってくることができる
+    const id = req.params.id
+    const followerID = req.params.follower_id
+
+    //idで指定した人がfollower_idで指定した人をフォローしていればその情報を返す(followingテーブルとusersテーブルを結合したままの情報で返す)
+    db.get(`SELECT * FROM following LEFT JOIN  users ON following.followed_id = users.id WHERE following_id=${id} and followed_id=${followerID}`,(err,row) => {
+        //resはjsonというメソッドを持っていて引数で指定したjsonをそのまま返す。
+        if (!row) {
+            res.status(404).send({error:"Not Found"})
+        } else {
+            res.status(200).json(row)
+        }
+    })
+    db.close()
+})
+
 const port = process.env.PORT || 3000;
 app.listen(port)
 console.log("Listen on port:" + 3000);
