@@ -203,6 +203,43 @@ app.get('/api/v1/users/:id/following/:followed_id',(req, res) => {
     db.close()
 })
 
+// follow機能
+// id フォローする人 followed_id フォローされる人
+app.post('/api/v1/users/:id/following/:followed_id',async (req, res) => {
+    //connect database
+    const db = new sqlite3.Database(dbPath)
+    //リクエストURLの:hogeをとってくることができる
+    const id = req.params.id
+    const followedID = req.params.followed_id
+
+    //usersテーブルにフォローする人が存在することを確認
+    db.get(`SELECT * FROM users WHERE id=${id}`,async(err,row) => {
+        if (!row) {
+            res.status(404).send({error:"フォローする側のユーザーが見つかりません"})
+        } else {
+            //usersテーブルにフォローされる人が存在することを確認
+            db.get(`SELECT * FROM users WHERE id=${followedID}`,async(err,row) => {
+                if (!row) {
+                    res.status(404).send({error:"フォローされる側のユーザーが見つかりません"})
+                } else {
+                    try {
+                        //runは失敗したときにrejectを返しそうするとcatchがエラーとしてキャッチしてくれる。
+                        await run(
+                            `INSERT INTO following (following_id, followed_id) VALUES ("${id}","${followedID}")`,
+                            db
+                        )
+                        res.status(201).send({message:`${id}は${followedID}をフォローしました。`})
+                    } catch (e) {
+                        res.status(500).send({error:e})
+                    }
+                }
+            })
+        }
+    })
+
+    db.close()
+})
+
 const port = process.env.PORT || 3000;
 app.listen(port)
 console.log("Listen on port:" + 3000);
