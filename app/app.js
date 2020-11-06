@@ -240,6 +240,29 @@ app.post('/api/v1/users/:id/following/:followed_id',async (req, res) => {
     db.close()
 })
 
+
+// follow解除機能
+// id フォローしている人 followed_id フォローされている人
+app.delete('/api/v1/users/:id/following/:followed_id',async (req, res) => {
+    //connect database
+    const db = new sqlite3.Database(dbPath)
+    //リクエストURLの:hogeをとってくることができる
+    const id = req.params.id
+    const followedID = req.params.followed_id
+
+    //動きに問題がないのでユーザーの存在確認はしない
+    try {
+        await run(
+            `DELETE FROM following WHERE following_id=${id} and followed_id=${followedID}`,
+            db
+        )
+        res.status(200).send({message: "フォローを解除しました。"})
+    } catch(e){
+        res.status(500).send({error:e})
+    }
+    db.close()
+})
+
 const port = process.env.PORT || 3000;
 app.listen(port)
 console.log("Listen on port:" + 3000);
