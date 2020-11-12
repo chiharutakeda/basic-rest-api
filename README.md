@@ -1,3 +1,3 @@
-# 基本的なAPIの練習
+# RESTfulなAPIの練習
 
-E sqlite3 
+Express sqlite3 
